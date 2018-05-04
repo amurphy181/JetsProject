@@ -1,5 +1,5 @@
 package com.skilldistillery.jets;
 
-public abstract class Jets {
+public class FighterJet extends Jet{
 
 }
