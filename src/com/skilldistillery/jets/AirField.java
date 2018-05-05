@@ -53,7 +53,7 @@ public class AirField {
 			} else if (userChoice == 6) {
 
 			} else if (userChoice == 7) {
-
+				addPlaneToFleet();
 			} else if (userChoice == 8) {
 				System.out.println("\nGoodbye! We hope you enjoyed your airfield simulator.");
 				looper = false;
@@ -81,34 +81,46 @@ public class AirField {
 		}
 		return flyAllJets;
 	}
-	
+
 	public void addPlaneToFleet() {
 		Scanner input = new Scanner(System.in);
 		System.out.println("What type of plane would you like to add to the fleet?");
 		System.out.println("1. Fighter Jet");
 		System.out.println("2. Cargo Plane");
 		int planeType = input.nextInt();
+		input.nextLine();
 		System.out.print("Enter the model type: ");
 		String planeModel = input.nextLine();
+//		input.nextLine();
 		System.out.print("Enter the top speed: ");
 		double planeSpeed = input.nextDouble();
 		System.out.print("Enter the range: ");
 		int planeRange = input.nextInt();
 		System.out.print("How much does Lockheed want for this one? Please enter: ");
 		long planePrice = input.nextLong();
-		
-		if(planeType == 1) {
+		input.nextLine();
+		int planeMissileCapacity = 0;
+		int planePassengerCapacity = 0;
+		if (planeType == 1) {
 			System.out.print("Please enter the total number of missiles: ");
-			int planeMissileCapacity = input.nextInt();
+			planeMissileCapacity = input.nextInt();
 		} else if (planeType == 2) {
 			System.out.print("Please enter the total number of passengers: ");
-			int planePassengerCapacity = input.nextInt();
-			
+			planePassengerCapacity = input.nextInt();
 		}
-		
+
 		for (int i = 0; i < baseAlpha.length; i++) {
-			
+			if (baseAlpha[i] == null) {
+				if (planeType == 1) {
+					baseAlpha[i] = new FighterJet(planeModel, planeSpeed, planeRange, planePrice, planeMissileCapacity);
+					break;
+				} else if (planeType == 2) {
+					baseAlpha[i] = new CargoPlane(planeModel, planeSpeed, planeRange, planePrice, planePassengerCapacity);
+					break;
+				}
+			}
 		}
+
 	}
 
 	public String viewFastestPlane() {
@@ -140,18 +152,18 @@ public class AirField {
 		}
 		return longestRange;
 	}
-	
+
 	public StringBuilder loadCargoPlanes() {
 		StringBuilder cargoPlane = new StringBuilder("\n");
 		for (Jet jet : baseAlpha) {
-			if(jet != null) {
-				if(jet instanceof CargoPlane) {
+			if (jet != null) {
+				if (jet instanceof CargoPlane) {
 					cargoPlane.append(jet.getModel() + " ready for loading! What say you, lackeys?!\n");
-					cargoPlane.append((((CargoPlane)jet).loadCargo()) + "\n\n");
+					cargoPlane.append((((CargoPlane) jet).loadCargo()) + "\n\n");
 				}
 			}
 		}
-		return cargoPlane; 
+		return cargoPlane;
 	}
 
 }
