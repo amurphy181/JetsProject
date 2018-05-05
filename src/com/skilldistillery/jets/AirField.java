@@ -3,8 +3,6 @@ package com.skilldistillery.jets;
 import java.util.Scanner;
 
 public class AirField {
-	
-	int userChoice = displayUserMenu();
 
 	Jet[] baseAlpha;
 
@@ -19,36 +17,47 @@ public class AirField {
 
 	}
 
-	int displayUserMenu() {
-		System.out.println("1: List Fleet");
+	void displayUserMenu() {
+		System.out.println("\n1: List Fleet");
 		System.out.println("2: Fly all jets");
 		System.out.println("3: View fastest jet");
 		System.out.println("4: View jet with longest range");
 		System.out.println("5: Load all Cargo Jets");
 		System.out.println("6: Dogfight!!");
 		System.out.println("7: Add a jet to the fleet");
-		System.out.println("8: Quit");
-		Scanner input = new Scanner(System.in);
-		int userChoice = input.nextInt();
-		return userChoice;
+		System.out.println("8: Quit\n");
 
 	}
-	
-	void userSelection(int userChoice) {
-		switch(userChoice) {
-		case 1:
-			listFleet();
-			break;
-		case 2:
-			flyAllJets();
-			break;
-		case 3:
-			viewFastestPlane();
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
+
+	void userSelection() {
+		boolean looper = true;
+		while (looper) {
+			displayUserMenu();
+			Scanner input = new Scanner(System.in);
+			int userChoice = input.nextInt();
+			if (userChoice == 1) {
+				listFleet();
+			} else if (userChoice == 2) {
+				System.out.println("Preparing planes for takeoff!\n");
+				StringBuilder flyJets = (flyAllJets());
+				System.out.println(flyJets);
+			} else if (userChoice == 3) {
+				String fastestJet = viewFastestPlane();
+				System.out.println("The fastest plane in the fleet is the " + fastestJet);
+			} else if (userChoice == 4) {
+				String longestRange = viewPlaneWithLongestRange();
+				System.out.println("The longest-ranging plane in the fleet is the " + longestRange);
+			} else if (userChoice == 5) {
+				StringBuilder cargoPlaneList = listCargoJets();
+				System.out.println(cargoPlaneList);
+			} else if (userChoice == 6) {
+
+			} else if (userChoice == 7) {
+
+			} else if (userChoice == 8) {
+				System.out.println("\nGoodbye! We hope you enjoyed your airfield simulator.");
+				looper = false;
+			}
 		}
 	}
 
@@ -62,11 +71,11 @@ public class AirField {
 			}
 		}
 	}
-	
+
 	public StringBuilder flyAllJets() {
 		StringBuilder flyAllJets = new StringBuilder();
 		for (Jet jet : baseAlpha) {
-			if(jet != null) {
+			if (jet != null) {
 				flyAllJets.append(jet.getModel() + " in the air!\n");
 			}
 		}
@@ -86,6 +95,33 @@ public class AirField {
 			}
 		}
 		return fastest;
+	}
+
+	public String viewPlaneWithLongestRange() {
+		double range = 0;
+		String longestRange = null;
+
+		for (Jet jet : baseAlpha) {
+			if (jet != null) {
+				if (jet.getRange() > range) {
+					range = jet.getRange();
+					longestRange = jet.getModel();
+				}
+			}
+		}
+		return longestRange;
+	}
+	
+	public StringBuilder listCargoJets() {
+		StringBuilder cargoPlane = new StringBuilder("The cargo planes are as follows:\n");
+		for (Jet jet : baseAlpha) {
+			if(jet != null) {
+				if(jet instanceof CargoPlane) {
+					cargoPlane.append("\n\t" + jet.getModel());
+				}
+			}
+		}
+		return cargoPlane; 
 	}
 
 }
