@@ -10,9 +10,9 @@ public class CargoPlane extends Jet implements CargoCarrier{
 	}
 
 	@Override
-	public void loadCargo() {
-		// TODO Auto-generated method stub
-		
+	public String loadCargo() {
+		String cargoLoad = "Loading up the plane bruh!";
+		return cargoLoad;
 	}
 
 	@Override

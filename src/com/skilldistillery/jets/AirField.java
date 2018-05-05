@@ -48,7 +48,7 @@ public class AirField {
 				String longestRange = viewPlaneWithLongestRange();
 				System.out.println("The longest-ranging plane in the fleet is the " + longestRange);
 			} else if (userChoice == 5) {
-				StringBuilder cargoPlaneList = listCargoJets();
+				StringBuilder cargoPlaneList = loadCargoPlanes();
 				System.out.println(cargoPlaneList);
 			} else if (userChoice == 6) {
 
@@ -81,6 +81,35 @@ public class AirField {
 		}
 		return flyAllJets;
 	}
+	
+	public void addPlaneToFleet() {
+		Scanner input = new Scanner(System.in);
+		System.out.println("What type of plane would you like to add to the fleet?");
+		System.out.println("1. Fighter Jet");
+		System.out.println("2. Cargo Plane");
+		int planeType = input.nextInt();
+		System.out.print("Enter the model type: ");
+		String planeModel = input.nextLine();
+		System.out.print("Enter the top speed: ");
+		double planeSpeed = input.nextDouble();
+		System.out.print("Enter the range: ");
+		int planeRange = input.nextInt();
+		System.out.print("How much does Lockheed want for this one? Please enter: ");
+		long planePrice = input.nextLong();
+		
+		if(planeType == 1) {
+			System.out.print("Please enter the total number of missiles: ");
+			int planeMissileCapacity = input.nextInt();
+		} else if (planeType == 2) {
+			System.out.print("Please enter the total number of passengers: ");
+			int planePassengerCapacity = input.nextInt();
+			
+		}
+		
+		for (int i = 0; i < baseAlpha.length; i++) {
+			
+		}
+	}
 
 	public String viewFastestPlane() {
 		double speed = 0;
@@ -112,12 +141,13 @@ public class AirField {
 		return longestRange;
 	}
 	
-	public StringBuilder listCargoJets() {
-		StringBuilder cargoPlane = new StringBuilder("The cargo planes are as follows:\n");
+	public StringBuilder loadCargoPlanes() {
+		StringBuilder cargoPlane = new StringBuilder("\n");
 		for (Jet jet : baseAlpha) {
 			if(jet != null) {
 				if(jet instanceof CargoPlane) {
-					cargoPlane.append("\n\t" + jet.getModel());
+					cargoPlane.append(jet.getModel() + " ready for loading! What say you, lackeys?!\n");
+					cargoPlane.append((((CargoPlane)jet).loadCargo()) + "\n\n");
 				}
 			}
 		}
