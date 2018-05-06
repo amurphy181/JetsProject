@@ -25,7 +25,8 @@ public class AirField {
 		System.out.println("5: Load all Cargo Jets");
 		System.out.println("6: Dogfight!!");
 		System.out.println("7: Add a jet to the fleet");
-		System.out.println("8: Quit\n");
+		System.out.println("8: View flight times of jet aircraft");
+		System.out.println("9: Quit\n");
 
 	}
 
@@ -54,7 +55,10 @@ public class AirField {
 
 			} else if (userChoice == 7) {
 				addPlaneToFleet();
-			} else if (userChoice == 8) {
+			} else if(userChoice == 8) {
+				aircraftFlightTimes();
+			}
+			else if (userChoice == 9) {
 				System.out.println("\nGoodbye! We hope you enjoyed your airfield simulator.");
 				looper = false;
 			}
@@ -81,8 +85,9 @@ public class AirField {
 		}
 		return flyAllJets;
 	}
-
-	public void addPlaneToFleet() {
+	
+	// take input for different plane types, then use those variable to populate new plane constructors 
+	public void addPlaneToFleet() { 
 		Scanner input = new Scanner(System.in);
 		System.out.println("What type of plane would you like to add to the fleet?");
 		System.out.println("1. Fighter Jet");
@@ -153,7 +158,7 @@ public class AirField {
 		return longestRange;
 	}
 
-	public StringBuilder loadCargoPlanes() {
+	public StringBuilder loadCargoPlanes() { //call the load method on cargo planes exclusively 
 		StringBuilder cargoPlane = new StringBuilder("\n");
 		for (Jet jet : baseAlpha) {
 			if (jet != null) {
@@ -165,5 +170,40 @@ public class AirField {
 		}
 		return cargoPlane;
 	}
+	
+	public void aircraftFlightTimes() { //print out total flight time (range/speed in m.p.h.) when called
+		for (Jet jet : baseAlpha) {
+			if(jet != null) {
+				String flightTime = jet.fly();
+				System.out.println("\nFlight time information as follows:");
+				System.out.println("       Aircraft model: " + jet.getModel());
+				System.out.println("Available flight time: " + flightTime + " hours.");
+			}
+		}
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

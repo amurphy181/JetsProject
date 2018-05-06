@@ -1,5 +1,7 @@
 package com.skilldistillery.jets;
 
+import java.text.DecimalFormat;
+
 public abstract class Jet {
 	
 	private String model;
@@ -12,6 +14,14 @@ public abstract class Jet {
 		this.speed = speed;
 		this.range = range;
 		this.price = price;
+	}
+	
+	public String fly() { // determine the effective flight range of the aircraft by dividing range by miles per hour
+		System.out.println("\nFunctional flight time before empty: ");
+		DecimalFormat df = new DecimalFormat("#.##");
+		double flightTime = range / speed;
+		String flightTimeString = df.format(flightTime);
+		return flightTimeString;
 	}
 
 	public String getModel() {
