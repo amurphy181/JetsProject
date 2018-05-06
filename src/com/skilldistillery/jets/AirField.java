@@ -274,7 +274,7 @@ public class AirField {
 		int count = 0;
 		
 		for (Jet jet : baseAlpha) {
-			if(jet != null) {
+			if(jet != null && pilots[count] != null) {
 				pilotWithJet[count] = ("Plane: " + jet.getModel() + "\tPilot: " +pilots[count].getPilotName());
 				count++;
 			}
