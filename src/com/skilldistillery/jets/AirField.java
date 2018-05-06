@@ -27,6 +27,8 @@ public class AirField {
 		pilots[4] = new Pilots("Lando Calrissian");
 
 	}
+	
+	public String[] pilotWithJet = new String[20];
 
 	void displayUserMenu() {
 		System.out.println("\n1: List Fleet");
@@ -39,7 +41,9 @@ public class AirField {
 		System.out.println("8: Add a pilot");
 		System.out.println("9: Add a jet to the fleet");
 		System.out.println("10: View flight times of jet aircraft");
-		System.out.println("11: Quit\n");
+		System.out.println("11: Match planes to pilots");
+		System.out.println("12: Review Aircraft/Airman matches");
+		System.out.println("13: Quit\n");
 
 	}
 
@@ -65,7 +69,7 @@ public class AirField {
 				StringBuilder cargoPlaneList = loadCargoPlanes();
 				System.out.println(cargoPlaneList);
 			} else if (userChoice == 6) { // figure out the dog fighting aspect
-
+				System.out.println("Working on getting the aircraft operational, sir!");
 			} else if (userChoice == 7) { // view list of pilots
 				System.out.println("Pilots available: ");
 				StringBuilder pilotNames = listPilots();
@@ -76,7 +80,15 @@ public class AirField {
 				addPlaneToFleet();
 			} else if (userChoice == 10) {
 				aircraftFlightTimes();
-			} else if (userChoice == 11) {
+			} else if (userChoice == 11) { // match up the planes to a pilot, non-random
+				System.out.println("Matching planes to pilots!");
+				jetPilotMatchup();
+				System.out.println("Completed. Please select the correct menu item to view the results for today's flights.");
+			} else if (userChoice == 12) { // list the array that shows the pilot with plane matchup
+				System.out.println("Aircraft with Airman matches are as follows: ");
+				StringBuilder pilotWithPlaneList = listPilotMatchup();
+				System.out.println(pilotWithPlaneList);
+			} else if (userChoice == 13) {
 				System.out.println("\nGoodbye! We hope you enjoyed your airfield simulator.");
 				looper = false;
 			}
@@ -256,5 +268,50 @@ public class AirField {
 		}
 
 	}
+	
+	public void jetPilotMatchup() {
+		
+		int count = 0;
+		
+		for (Jet jet : baseAlpha) {
+			if(jet != null) {
+				pilotWithJet[count] = ("Plane: " + jet.getModel() + "\tPilot: " +pilots[count].getPilotName());
+				count++;
+			}
+		}
+		
+	}
+	
+	public StringBuilder listPilotMatchup() {
+		StringBuilder pilotMatchup = new StringBuilder();
+		for (String pilotWithJet2 : pilotWithJet) {
+			if (pilotWithJet2 != null) {
+				pilotMatchup = (pilotMatchup.append(pilotWithJet2 + "\n"));
+			}
+		}
+		return pilotMatchup;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
