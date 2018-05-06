@@ -17,7 +17,6 @@ public abstract class Jet {
 	}
 	
 	public String fly() { // determine the effective flight range of the aircraft by dividing range by miles per hour
-		System.out.println("\nFunctional flight time before empty: ");
 		DecimalFormat df = new DecimalFormat("#.##");
 		double flightTime = range / speed;
 		String flightTimeString = df.format(flightTime);

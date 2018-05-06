@@ -71,7 +71,7 @@ public class AirField {
 				StringBuilder pilotNames = listPilots();
 				System.out.println(pilotNames);
 			} else if (userChoice == 8) { // add a pilot to the roster
-
+				addPilotToRoster();
 			} else if (userChoice == 9) {
 				addPlaneToFleet();
 			} else if (userChoice == 10) {
@@ -192,12 +192,12 @@ public class AirField {
 	}
 
 	public void aircraftFlightTimes() { // print out total flight time (range/speed in m.p.h.) when called
+		System.out.println("\nFlight time information (at full burn):\n");
 		for (Jet jet : baseAlpha) {
 			if (jet != null) {
 				String flightTime = jet.fly();
-				System.out.println("\nFlight time information as follows:");
-				System.out.println("       Aircraft model: " + jet.getModel());
-				System.out.println("Available flight time: " + flightTime + " hours.");
+				System.out.println("           Aircraft model: " + jet.getModel());
+				System.out.println("    Available flight time: " + flightTime + " hours.\n");
 			}
 		}
 	}
@@ -206,12 +206,55 @@ public class AirField {
 	public StringBuilder listPilots() {
 		StringBuilder nameList = new StringBuilder("");
 		for (Pilots pilots2 : pilots) {
-			if(pilots2 != null) {
+			if (pilots2 != null) {
 				nameList.append("\t" + pilots2.pilotName + "\n");
-		}
+			}
 		}
 		return nameList;
-		
+
+	}
+
+	public void addPilotToRoster() { // use a switch to add a predetermined pilot, or add one of your own
+		System.out.println("Hiring? \n\nPlease select from a pilot from the list below, or press \"5\" to add your own.");
+		System.out.println("1. Colonel Plandebuilt");
+		System.out.println("2. Shuck Todgers");
+		System.out.println("3. Le Petit Bonhomme de Neige");
+		System.out.println("4. Harold. Just Harold.");
+		System.out.println("5. Add your own!");
+		Scanner input = new Scanner(System.in);
+		int pilotChoice = input.nextInt();
+		input.nextLine();
+
+		for (int i = 0; i < pilots.length; i++) {
+			if (pilots[i] == null) {
+				if (pilotChoice == 1) {
+					System.out.println("Colonel Plandebuilt, at your service!");
+					pilots[i] = new Pilots("Colonel Plandebuilt");
+					break;
+				} else if (pilotChoice == 2) {
+					System.out.println("Shuck Todgers, inebriated but ready!");
+					pilots[i] = new Pilots("Shuck Todgers");
+					break;
+				} else if (pilotChoice == 3) {
+					System.out.println("Le Petit Bonhomme de Neige, eager for altitude!");
+					pilots[i] = new Pilots("Le Petit Bonhomme de Neige");
+					break;
+				} else if (pilotChoice == 4) {
+					System.out.println("Harold.");
+					pilots[i] = new Pilots("Harold");
+					break;
+				} else if (pilotChoice == 5) {
+					System.out.println("Have someone in mind, eh? \nEnter on the dotted line: ...........");
+					String pilotName = input.nextLine();
+					pilots[i] = new Pilots(pilotName);
+					System.out.println("\nAirman " + pilotName + ", trained and ready!");
+					break;
+				} else {
+					System.out.println("No choice like an incorrect choice.");
+				}
+			}
+		}
+
 	}
 
 }
