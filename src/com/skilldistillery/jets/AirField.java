@@ -17,6 +17,17 @@ public class AirField {
 
 	}
 
+	public Pilots pilots[] = new Pilots[20];
+
+	{
+		pilots[0] = new Pilots("Yossarian");
+		pilots[1] = new Pilots("Major Major");
+		pilots[2] = new Pilots("Chuck Yeager");
+		pilots[3] = new Pilots("Billy \"One-Eyed Wonder\" Cloudchaser");
+		pilots[4] = new Pilots("Lando Calrissian");
+
+	}
+
 	void displayUserMenu() {
 		System.out.println("\n1: List Fleet");
 		System.out.println("2: Fly all jets");
@@ -24,9 +35,11 @@ public class AirField {
 		System.out.println("4: View jet with longest range");
 		System.out.println("5: Load all Cargo Jets");
 		System.out.println("6: Dogfight!!");
-		System.out.println("7: Add a jet to the fleet");
-		System.out.println("8: View flight times of jet aircraft");
-		System.out.println("9: Quit\n");
+		System.out.println("7: List pilots");
+		System.out.println("8: Add a pilot");
+		System.out.println("9: Add a jet to the fleet");
+		System.out.println("10: View flight times of jet aircraft");
+		System.out.println("11: Quit\n");
 
 	}
 
@@ -51,14 +64,19 @@ public class AirField {
 			} else if (userChoice == 5) {
 				StringBuilder cargoPlaneList = loadCargoPlanes();
 				System.out.println(cargoPlaneList);
-			} else if (userChoice == 6) {
+			} else if (userChoice == 6) { // figure out the dog fighting aspect
 
-			} else if (userChoice == 7) {
+			} else if (userChoice == 7) { // view list of pilots
+				System.out.println("Pilots available: ");
+				StringBuilder pilotNames = listPilots();
+				System.out.println(pilotNames);
+			} else if (userChoice == 8) { // add a pilot to the roster
+
+			} else if (userChoice == 9) {
 				addPlaneToFleet();
-			} else if(userChoice == 8) {
+			} else if (userChoice == 10) {
 				aircraftFlightTimes();
-			}
-			else if (userChoice == 9) {
+			} else if (userChoice == 11) {
 				System.out.println("\nGoodbye! We hope you enjoyed your airfield simulator.");
 				looper = false;
 			}
@@ -85,9 +103,10 @@ public class AirField {
 		}
 		return flyAllJets;
 	}
-	
-	// take input for different plane types, then use those variable to populate new plane constructors 
-	public void addPlaneToFleet() { 
+
+	// take input for different plane types, then use those variable to populate new
+	// plane constructors
+	public void addPlaneToFleet() {
 		Scanner input = new Scanner(System.in);
 		System.out.println("What type of plane would you like to add to the fleet?");
 		System.out.println("1. Fighter Jet");
@@ -96,7 +115,7 @@ public class AirField {
 		input.nextLine();
 		System.out.print("Enter the model type: ");
 		String planeModel = input.nextLine();
-//		input.nextLine();
+		// input.nextLine();
 		System.out.print("Enter the top speed: ");
 		double planeSpeed = input.nextDouble();
 		System.out.print("Enter the range: ");
@@ -120,7 +139,8 @@ public class AirField {
 					baseAlpha[i] = new FighterJet(planeModel, planeSpeed, planeRange, planePrice, planeMissileCapacity);
 					break;
 				} else if (planeType == 2) {
-					baseAlpha[i] = new CargoPlane(planeModel, planeSpeed, planeRange, planePrice, planePassengerCapacity);
+					baseAlpha[i] = new CargoPlane(planeModel, planeSpeed, planeRange, planePrice,
+							planePassengerCapacity);
 					break;
 				}
 			}
@@ -158,7 +178,7 @@ public class AirField {
 		return longestRange;
 	}
 
-	public StringBuilder loadCargoPlanes() { //call the load method on cargo planes exclusively 
+	public StringBuilder loadCargoPlanes() { // call the load method on cargo planes exclusively
 		StringBuilder cargoPlane = new StringBuilder("\n");
 		for (Jet jet : baseAlpha) {
 			if (jet != null) {
@@ -170,10 +190,10 @@ public class AirField {
 		}
 		return cargoPlane;
 	}
-	
-	public void aircraftFlightTimes() { //print out total flight time (range/speed in m.p.h.) when called
+
+	public void aircraftFlightTimes() { // print out total flight time (range/speed in m.p.h.) when called
 		for (Jet jet : baseAlpha) {
-			if(jet != null) {
+			if (jet != null) {
 				String flightTime = jet.fly();
 				System.out.println("\nFlight time information as follows:");
 				System.out.println("       Aircraft model: " + jet.getModel());
@@ -182,28 +202,16 @@ public class AirField {
 		}
 	}
 
+	// output name by iterating through the pilots list for all non-null pilots
+	public StringBuilder listPilots() {
+		StringBuilder nameList = new StringBuilder("");
+		for (Pilots pilots2 : pilots) {
+			if(pilots2 != null) {
+				nameList.append("\t" + pilots2.pilotName + "\n");
+		}
+		}
+		return nameList;
+		
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
