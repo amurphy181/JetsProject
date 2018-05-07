@@ -19,7 +19,7 @@ Opening the program brings up a welcome message followed by a menu to allow for 
 
 It is, however, possible to have more pilots than planes or vice-versa. If this is the case, matching planes to pilots will result in only as many matches as there are the lesser of said planes or pilots. Without this protection in place, the program would attempt to match objects with a null value and upset the runtime environment.
 
-Dog-fighting is not in the first version, but will be added as a stretch goal.
+Dog-fighting is not in the first version, but will be added as a stretch goal. Currently I am having loop issues!
 
 #### Lessons Learned
 
@@ -28,3 +28,5 @@ Lessons in no particular order:
 - It is much easier to access an array throughout a class if one keeps it as a non-static class. Cascades of annoyance flow forth if this is not followed. (Thank you, Denise, for the lesson and clarification on this particular bugbear!!)
 
 - When iterating an array, it is good practice to provide a filter so that a given for or foreach loop does not have a "null-pointer exception" when it tries to act on an unfilled array.
+
+- Many lessons to be learned about the dog fight. This stretch goal remains as such for now.
