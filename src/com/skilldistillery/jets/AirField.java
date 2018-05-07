@@ -9,12 +9,22 @@ public class AirField {
 	{
 		baseAlpha = new Jet[20];
 
-		baseAlpha[0] = new FighterJet("F-15", 1500, 2000, 35_000_000, 8);
-		baseAlpha[1] = new FighterJet("F-22", 1800, 2000, 35_000_000, 8);
+		baseAlpha[0] = new FighterJet("F-15", 1500, 2000, 35_000_000, 8, 100);
+		baseAlpha[1] = new FighterJet("F-22", 1800, 2000, 35_000_000, 8, 90);
 		baseAlpha[2] = new CargoPlane("C-130 Hercules", 450, 2000, 35_000_000, 8);
 		baseAlpha[3] = new CargoPlane("C-5 Galaxy", 500, 2000, 35_000_000, 40);
-		baseAlpha[4] = new FighterJet("F-18", 2000, 2000, 35_000_000, 8);
+		baseAlpha[4] = new FighterJet("F-18", 2000, 2000, 35_000_000, 8, 80);
 
+	}
+
+	Jet[] attackersSukhoi;
+
+	{
+		attackersSukhoi = new Jet[20];
+
+		attackersSukhoi[0] = new Attackers("Su-37", 1800, 2500, 40_000_000, 6, 90);
+		attackersSukhoi[1] = new Attackers("Su-37", 1800, 2500, 40_000_000, 6, 90);
+		attackersSukhoi[2] = new Attackers("Su-37", 1800, 2500, 40_000_000, 6, 90);
 	}
 
 	public Pilots pilots[] = new Pilots[20];
@@ -27,7 +37,7 @@ public class AirField {
 		pilots[4] = new Pilots("Lando Calrissian");
 
 	}
-	
+
 	public String[] pilotWithJet = new String[20];
 
 	void displayUserMenu() {
@@ -69,7 +79,8 @@ public class AirField {
 				StringBuilder cargoPlaneList = loadCargoPlanes();
 				System.out.println(cargoPlaneList);
 			} else if (userChoice == 6) { // figure out the dog fighting aspect
-				System.out.println("Working on getting the aircraft operational, sir!");
+				System.out.println("\nAttackers inbound! Scramble the fighters!");
+				Dogfight();
 			} else if (userChoice == 7) { // view list of pilots
 				System.out.println("Pilots available: ");
 				StringBuilder pilotNames = listPilots();
@@ -83,7 +94,8 @@ public class AirField {
 			} else if (userChoice == 11) { // match up the planes to a pilot, non-random
 				System.out.println("Matching planes to pilots!");
 				jetPilotMatchup();
-				System.out.println("Completed. Please select the correct menu item to view the results for today's flights.");
+				System.out.println(
+						"Completed. Please select the correct menu item to view the results for today's flights.");
 			} else if (userChoice == 12) { // list the array that shows the pilot with plane matchup
 				System.out.println("Aircraft with Airman matches are as follows: ");
 				StringBuilder pilotWithPlaneList = listPilotMatchup();
@@ -137,9 +149,12 @@ public class AirField {
 		input.nextLine();
 		int planeMissileCapacity = 0;
 		int planePassengerCapacity = 0;
+		int planeHealth = 0;
 		if (planeType == 1) {
 			System.out.print("Please enter the total number of missiles: ");
 			planeMissileCapacity = input.nextInt();
+			System.out.print("Please enter the total health: ");
+			planeHealth = input.nextInt();
 		} else if (planeType == 2) {
 			System.out.print("Please enter the total number of passengers: ");
 			planePassengerCapacity = input.nextInt();
@@ -148,7 +163,8 @@ public class AirField {
 		for (int i = 0; i < baseAlpha.length; i++) {
 			if (baseAlpha[i] == null) {
 				if (planeType == 1) {
-					baseAlpha[i] = new FighterJet(planeModel, planeSpeed, planeRange, planePrice, planeMissileCapacity);
+					baseAlpha[i] = new FighterJet(planeModel, planeSpeed, planeRange, planePrice, planeMissileCapacity,
+							planeHealth);
 					break;
 				} else if (planeType == 2) {
 					baseAlpha[i] = new CargoPlane(planeModel, planeSpeed, planeRange, planePrice,
@@ -227,7 +243,8 @@ public class AirField {
 	}
 
 	public void addPilotToRoster() { // use a switch to add a predetermined pilot, or add one of your own
-		System.out.println("Hiring? \n\nPlease select from a pilot from the list below, or press \"5\" to add your own.");
+		System.out
+				.println("Hiring? \n\nPlease select from a pilot from the list below, or press \"5\" to add your own.");
 		System.out.println("1. Colonel Plandebuilt");
 		System.out.println("2. Shuck Todgers");
 		System.out.println("3. Le Petit Bonhomme de Neige");
@@ -268,20 +285,20 @@ public class AirField {
 		}
 
 	}
-	
+
 	public void jetPilotMatchup() {
-		
+
 		int count = 0;
-		
+
 		for (Jet jet : baseAlpha) {
-			if(jet != null && pilots[count] != null) {
-				pilotWithJet[count] = ("Plane: " + jet.getModel() + "\tPilot: " +pilots[count].getPilotName());
+			if (jet != null && pilots[count] != null) {
+				pilotWithJet[count] = ("Plane: " + jet.getModel() + "\tPilot: " + pilots[count].getPilotName());
 				count++;
 			}
 		}
-		
+
 	}
-	
+
 	public StringBuilder listPilotMatchup() {
 		StringBuilder pilotMatchup = new StringBuilder();
 		for (String pilotWithJet2 : pilotWithJet) {
@@ -290,28 +307,106 @@ public class AirField {
 			}
 		}
 		return pilotMatchup;
+
 	}
 
+	public void Dogfight() {
+		String attackerName;
+		String defenderName;
+
+		int defenderHealth;
+		int attackerHealth;
+		int missilesDefender;
+		int missilesDefenderDamage = 25;
+		int missilesAttacker;
+		int missilesAttackerDamage = 25;
+
+		boolean defenderAlive = true;
+		boolean attackerAlive = true;
+		double hitChance;
+		for (Jet defender : baseAlpha) {
+			if (defender instanceof FighterJet) { // run first fighter in the base through the gauntlet. Best of luck.
+				missilesDefender = ((FighterJet) defender).getMissileCapacity();
+				defenderHealth = ((FighterJet) defender).getHealth();
+				for (int i = 0; i < attackersSukhoi.length; i++) {
+					if(attackersSukhoi[i] != null) {
+					attackerName = ((Attackers) attackersSukhoi[i]).getModel();
+					attackerHealth = ((Attackers) attackersSukhoi[i]).getHealth();
+					missilesAttacker = ((Attackers) attackersSukhoi[i]).getMissileCapacity();
+
+					while (defenderAlive == true && attackerAlive == true) {
+						System.out.println("Defender firing missile!");
+						hitChance = Math.random();
+						if (hitChance <= 0.9 && missilesDefender > 0) { // 9/10 of a chance of hitting the target
+							attackerHealth = (attackerHealth - missilesDefenderDamage);
+							missilesDefender -= 1;
+							System.out.println(((Attackers) attackersSukhoi[i]).getModel() + " now has "
+									+ attackerHealth + " health.");
+							if (attackerHealth < 0) {
+								attackerAlive = false;
+								attackersSukhoi[i] = null;
+							}
+							// line up for a second shot
+							double secondShot = Math.random();
+							if (secondShot < 0.5 && attackerAlive == true && missilesDefender > 0) {
+								attackerHealth = (attackerHealth - missilesDefenderDamage);
+								missilesDefender = missilesDefender - 1;
+								((Attackers) attackersSukhoi[i]).setHealth(attackerHealth);
+								System.out.println("Successful second shot!!\n");
+								System.out.println(((Attackers) attackersSukhoi[i]).getModel() + " now has "
+										+ attackerHealth + " health.");
+								if (attackerHealth < 0) {
+									attackerAlive = false;
+									attackersSukhoi[i] = null;
+								}
+
+								// attacker comes back with a missile shot
+							} else {
+								System.out.println(attackerName + " firing missile at " + defender.getModel() + "!");
+								hitChance = Math.random();
+								if (hitChance <= 0.9 && missilesAttacker > 0) {
+									defenderHealth = (defenderHealth - missilesAttackerDamage);
+									if (defenderHealth < 0) {
+										defenderAlive = false;
+									}
+									missilesAttacker -= 1;
+									System.out.println(defender.getModel() + " friendly hit! " + defender.getModel()
+											+ " health now " + defenderHealth);
+
+									secondShot = Math.random();
+									if (secondShot < 0.5 && attackerAlive == true && missilesDefender > 0) {
+										attackerHealth = (attackerHealth - missilesDefenderDamage);
+										missilesDefender = missilesDefender - 1;
+										((Attackers) attackersSukhoi[i]).setHealth(attackerHealth);
+										System.out.println("Successful second shot!!\n");
+										System.out.println(((Attackers) attackersSukhoi[i]).getModel() + " now has "
+												+ attackerHealth + " health.");
+										if (attackerHealth < 0) {
+											attackerAlive = false;
+											attackersSukhoi[i] = null;
+										}
+										
+									}		
+								}
+							}
+						}
+					}
+				
+					}
+				}
+			
+			
+			}
+		
+		
+		}
+
+	
+	
+	}
+
+
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
