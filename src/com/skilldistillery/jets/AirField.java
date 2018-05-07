@@ -318,8 +318,10 @@ public class AirField {
 		int attackerHealth;
 		int missilesDefender;
 		int missilesDefenderDamage = 25;
+		int missilesDefenderRemaining;
 		int missilesAttacker;
 		int missilesAttackerDamage = 25;
+		int missilesAttackerRemaining;
 
 		boolean defenderAlive = true;
 		boolean attackerAlive = true;
@@ -327,86 +329,95 @@ public class AirField {
 		for (Jet defender : baseAlpha) {
 			if (defender instanceof FighterJet) { // run first fighter in the base through the gauntlet. Best of luck.
 				missilesDefender = ((FighterJet) defender).getMissileCapacity();
-				defenderHealth = ((FighterJet) defender).getHealth();
-				for (int i = 0; i < attackersSukhoi.length; i++) {
-					if(attackersSukhoi[i] != null) {
-					attackerName = ((Attackers) attackersSukhoi[i]).getModel();
-					attackerHealth = ((Attackers) attackersSukhoi[i]).getHealth();
-					missilesAttacker = ((Attackers) attackersSukhoi[i]).getMissileCapacity();
 
-					while (defenderAlive == true && attackerAlive == true) {
-						System.out.println("Defender firing missile!");
-						hitChance = Math.random();
-						if (hitChance <= 0.9 && missilesDefender > 0) { // 9/10 of a chance of hitting the target
-							attackerHealth = (attackerHealth - missilesDefenderDamage);
-							missilesDefender -= 1;
-							System.out.println(((Attackers) attackersSukhoi[i]).getModel() + " now has "
-									+ attackerHealth + " health.");
-							if (attackerHealth < 0) {
-								attackerAlive = false;
-								attackersSukhoi[i] = null;
-							}
-							// line up for a second shot
-							double secondShot = Math.random();
-							if (secondShot < 0.5 && attackerAlive == true && missilesDefender > 0) {
-								attackerHealth = (attackerHealth - missilesDefenderDamage);
-								missilesDefender = missilesDefender - 1;
-								((Attackers) attackersSukhoi[i]).setHealth(attackerHealth);
-								System.out.println("Successful second shot!!\n");
-								System.out.println(((Attackers) attackersSukhoi[i]).getModel() + " now has "
-										+ attackerHealth + " health.");
-								if (attackerHealth < 0) {
-									attackerAlive = false;
-									attackersSukhoi[i] = null;
-								}
+				while (defenderAlive == true && missilesDefender > 0) {
+					defenderName = ((FighterJet) defender).getModel();
+					defenderHealth = ((FighterJet) defender).getHealth();
+					for (int i = 0; i < attackersSukhoi.length; i++) {
+						if (attackersSukhoi[i] != null) {
+							attackerName = ((Attackers) attackersSukhoi[i]).getModel();
+							attackerHealth = ((Attackers) attackersSukhoi[i]).getHealth();
+							missilesAttacker = ((Attackers) attackersSukhoi[i]).getMissileCapacity();
 
-								// attacker comes back with a missile shot
-							} else {
-								System.out.println(attackerName + " firing missile at " + defender.getModel() + "!");
+							while (defenderAlive == true && attackerAlive == true) { // defensive attack sequence begins
+								System.out.println("\nEyes on bogey! \nDefender firing missile!");
 								hitChance = Math.random();
-								if (hitChance <= 0.9 && missilesAttacker > 0) {
-									defenderHealth = (defenderHealth - missilesAttackerDamage);
-									if (defenderHealth < 0) {
-										defenderAlive = false;
+								if (hitChance <= 0.9 && missilesDefender > 0) { // 9/10 of a chance of hitting the
+																				// target
+									attackerHealth = (attackerHealth - missilesDefenderDamage);
+									missilesDefender -= 1;
+									missilesDefenderRemaining = ((FighterJet) defender).getMissileCapacity() - missilesDefender;
+									System.out.println("\nMissile number " + missilesDefenderRemaining + " has hit!");
+									System.out.println(attackerName + " now has " + attackerHealth + " health.");
+									if (attackerHealth < 0) {
+										System.out.println("\nSplash our bandit!");
+										attackerAlive = false;
+										attackersSukhoi[i] = null;
 									}
-									missilesAttacker -= 1;
-									System.out.println(defender.getModel() + " friendly hit! " + defender.getModel()
-											+ " health now " + defenderHealth);
 
-									secondShot = Math.random();
+									// line up for a second shot, defense
+									double secondShot = Math.random();
 									if (secondShot < 0.5 && attackerAlive == true && missilesDefender > 0) {
 										attackerHealth = (attackerHealth - missilesDefenderDamage);
 										missilesDefender = missilesDefender - 1;
-										((Attackers) attackersSukhoi[i]).setHealth(attackerHealth);
-										System.out.println("Successful second shot!!\n");
-										System.out.println(((Attackers) attackersSukhoi[i]).getModel() + " now has "
-												+ attackerHealth + " health.");
+										missilesDefenderRemaining = ((FighterJet) defender).getMissileCapacity() - missilesDefender;
+										System.out.println("\nMissile number " + missilesDefenderRemaining + " has hit!");
+										System.out.println("\nSuccessful second shot!!");
+										System.out.println(attackerName + " now has " + attackerHealth + " health.");
 										if (attackerHealth < 0) {
+											System.out.println("\nSplash our bandit!");
 											attackerAlive = false;
 											attackersSukhoi[i] = null;
 										}
-										
-									}		
+
+									} else if (hitChance > 0.9) {
+										System.out.println("Defensive missile missed the target!");
+									}
+
+									// attacker comes back with a missile shot
+									else if (defenderAlive == true && attackerAlive == true && missilesAttacker > 0) {
+										System.out.println("\nHe's getting behind me!");
+										System.out.println(
+												attackerName + " firing missile at " + defender.getModel() + "!");
+										hitChance = Math.random();
+										if (hitChance <= 0.9 && missilesAttacker > 0 && attackerHealth > 0) {
+											defenderHealth = (defenderHealth - missilesAttackerDamage);
+											if (defenderHealth < 0) {
+												defenderAlive = false;
+											}
+											missilesAttacker -= 1;
+											System.out.println(defender.getModel() + " friendly hit! "
+													+ defender.getModel() + " health now " + defenderHealth);
+
+											secondShot = Math.random();
+											if (secondShot < 0.5 && attackerAlive == true && missilesDefender > 0) {
+												defenderHealth = (defenderHealth - missilesDefenderDamage);
+												missilesDefender = missilesDefender - 1;
+												((Attackers) attackersSukhoi[i]).setHealth(attackerHealth);
+												System.out.println("Successful second enemy shot!!\n");
+												System.out.println(
+														defenderName + " now has " + attackerHealth + " health.");
+												if (defenderHealth < 0) {
+													defenderAlive = false;
+													attackersSukhoi[i] = null;
+												}
+
+											}
+										} else {
+											System.out.println("Enemy missile missed!");
+										}
+									}
 								}
 							}
+
 						}
 					}
-				
-					}
 				}
-			
-			
-			}
-		
-		
-		}
 
-	
-	
+			} break;
+
+		} 
+
 	}
-
-
-
-
 
 }
